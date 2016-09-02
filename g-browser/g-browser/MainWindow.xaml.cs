@@ -22,14 +22,17 @@ namespace g_browser
     /// </summary>
     public partial class MainWindow : Window
     {
+        // Instanced version of our filescanner. Recursively gets all .exe's from a given directory and stores their relative information in memory.
         private FileScanner scanner = new FileScanner();
+        private DataExporter exporter = new DataExporter();
 
         public MainWindow()
         {
             InitializeComponent();
-            string path = "C:/Users/daniwood/";
-            var files = scanner.selectfolders(path, "exe").Select(f => new { Name = f.FileName, f.ParentDir });
+            string path = @"C:/Users/daniwood/";
+            var files = scanner.selectfolders(path, "exe");
             myDataGrid.ItemsSource = files;
+            save_button.PreviewMouseLeftButtonUp += new MouseButtonEventHandler((object sender, MouseButtonEventArgs e) => { exporter.export(files); });
         }
     }
 }

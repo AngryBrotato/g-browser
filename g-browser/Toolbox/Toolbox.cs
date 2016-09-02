@@ -4,11 +4,34 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Toolbox
 {
     public class Helpers
     {
+    }
+    public class DataExporter
+    {
+        public void export(List<FileData> files)
+        {
+            var json = JsonConvert.SerializeObject(files);
+            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var folderPath = Path.Combine(appDataPath, "gbrowser");
+            var fileName = Path.Combine(folderPath, "gdata.json");
+            var backupFileName = fileName + ".bak";
+
+            Directory.CreateDirectory(folderPath);
+            saveFile(fileName, backupFileName, json);
+        }
+        private void saveFile(string fileName, string backupFileName, string json)
+        {
+
+            if (File.Exists(backupFileName)) File.Delete(backupFileName);
+            if (File.Exists(fileName)) File.Move(fileName, backupFileName);
+
+            File.WriteAllText(fileName, json);
+        }
     }
     public class FileScanner
     {
@@ -25,6 +48,8 @@ namespace Toolbox
                     f =>
                      {
                          FileData temp_file = new FileData();
+                         temp_file.CreationDate = f.CreationTime;
+                         temp_file.LastUsed = f.LastAccessTime;
                          temp_file.FileName = f.Name;
                          temp_file.Size = Convert.ToUInt32(f.Length);
                          temp_file.ParentDir = f.DirectoryName;
@@ -51,5 +76,7 @@ namespace Toolbox
         public string Extension { get; set; }
         public string ParentDir { get; set; }
         public long Size { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime LastUsed { get; set; }
     }
 }
