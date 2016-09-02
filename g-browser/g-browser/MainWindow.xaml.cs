@@ -25,7 +25,7 @@ namespace g_browser
         {
             InitializeComponent();
             string path = "C:/Users/daniwood/";
-            var files = selectfolders(path, "exe").Select(f => f.FileName);
+            var files = selectfolders(path, "exe").Select(f => new { Name = f.FileName, f.ParentDir });
             myDataGrid.ItemsSource = files;
         }
         public List<FileData> selectfolders(string filename, string extension = "*")

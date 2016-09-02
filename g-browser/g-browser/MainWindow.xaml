@@ -10,7 +10,8 @@
         <!--<ListBox x:Name="listBox" HorizontalAlignment="Left" Height="300" Margin="10,10,0,0" VerticalAlignment="Top" Width="268"/>-->
         <DataGrid x:Name="myDataGrid" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn IsReadOnly="True" Binding="{Binding}" Header="Name"/>
+                <DataGridTextColumn IsReadOnly="True" Binding="{Binding Name}" Header="Name"/>
+                <DataGridTextColumn IsReadOnly="True" Binding="{Binding ParentDir}" Header="Directory"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
