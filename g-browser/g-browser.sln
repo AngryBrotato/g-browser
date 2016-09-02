@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "g-browser", "g-browser\g-browser.csproj", "{74694A55-4460-43F3-B0A6-73B87A0C6DE3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{956292E0-D382-467B-86FD-A66666056E44} = {956292E0-D382-467B-86FD-A66666056E44}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolbox", "Toolbox\Toolbox.csproj", "{956292E0-D382-467B-86FD-A66666056E44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{74694A55-4460-43F3-B0A6-73B87A0C6DE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74694A55-4460-43F3-B0A6-73B87A0C6DE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74694A55-4460-43F3-B0A6-73B87A0C6DE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{956292E0-D382-467B-86FD-A66666056E44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{956292E0-D382-467B-86FD-A66666056E44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{956292E0-D382-467B-86FD-A66666056E44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{956292E0-D382-467B-86FD-A66666056E44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
