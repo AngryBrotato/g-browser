@@ -22,17 +22,39 @@ namespace g_browser
     /// </summary>
     public partial class MainWindow : Window
     {
-        // Instanced version of our filescanner. Recursively gets all .exe's from a given directory and stores their relative information in memory.
-        private FileScanner scanner = new FileScanner();
-        private DataExporter exporter = new DataExporter();
+        public static MainWindow Instance { get; set; }
+        private static Page _returnPage;
+        private static Page _mainPage;
+        private double _aspectRatio = 1.33;
 
-        public MainWindow()
+        static MainWindow()
+        {
+            Instance = new MainWindow();
+            Page mainPage = new MainPage();
+            SetPage(mainPage);
+        }
+
+        private MainWindow()
         {
             InitializeComponent();
-            string path = @"C:/Users/daniwood/";
-            var files = scanner.selectfolders(path, "exe");
-            myDataGrid.ItemsSource = files;
-            save_button.PreviewMouseLeftButtonUp += new MouseButtonEventHandler((object sender, MouseButtonEventArgs e) => { exporter.export(files); });
+        }
+
+        private static void SetPage(Page pageToShow)
+        {
+            _returnPage = Instance.Content as Page;
+            Instance.Content = pageToShow;
+        }
+
+        public static void Return()
+        {
+            var tempContent = Instance.Content as Page;
+            Instance.Content = _returnPage;
+            _returnPage = _mainPage;
+        }
+
+        public static void OpenEditor(FileData file)
+        {
+            SetPage(new EditorPage(file));
         }
     }
 }

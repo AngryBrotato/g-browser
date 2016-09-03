@@ -13,5 +13,15 @@ namespace g_browser
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            Startup += App_Start;
+
+        }
+
+        private void App_Start(object sender, StartupEventArgs e)
+        {
+            g_browser.MainWindow.Instance.Show();
+        }
     }
 }
