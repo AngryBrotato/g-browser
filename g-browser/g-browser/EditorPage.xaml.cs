@@ -35,7 +35,7 @@ namespace g_browser
             title_input.Text = item.FileName;
             last_played_date.Content = item.LastUsed.ToShortDateString();
             installed_date.Content = item.CreationDate.ToShortDateString();
-            description_input.Text = item.FileName_full;
+            description_input.Text = item.FileNameFull;
         }
 
         private void SetupButtonEvents()

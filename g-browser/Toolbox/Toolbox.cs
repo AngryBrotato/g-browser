@@ -53,7 +53,7 @@ namespace Toolbox
                          temp_file.FileName = f.Name;
                          temp_file.Size = Convert.ToUInt32(f.Length);
                          temp_file.ParentDir = f.DirectoryName;
-                         temp_file.FileName_full = f.FullName;
+                         temp_file.FileNameFull = f.FullName;
                          temp_file.Extension = f.Extension;
                          files.Add(temp_file);
                      });
@@ -72,11 +72,17 @@ namespace Toolbox
     public class FileData
     {
         public string FileName { get; set; }
-        public string FileName_full { get; set; }
+        public string FileNameFull { get; set; }
         public string Extension { get; set; }
         public string ParentDir { get; set; }
         public long Size { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastUsed { get; set; }
+        public FileType Type { get; set; }
+    }
+
+    public enum FileType
+    {
+        Launcher, Game, Installer, Resource, Unknown
     }
 }

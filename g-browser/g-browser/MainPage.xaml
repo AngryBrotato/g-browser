@@ -24,8 +24,8 @@
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn IsReadOnly="True" Binding="{Binding FileName}" Header="Name"/>
                 <DataGridTextColumn IsReadOnly="True" Binding="{Binding LastUsed}" Header="Last Played"/>
+                <DataGridTextColumn IsReadOnly="True" Binding="{Binding FileName}" Header="Name"/>
                 <!--<DataGridTextColumn IsReadOnly="True" Binding="{Binding ParentDir}" Header="Directory"/>-->
             </DataGrid.Columns>
         </DataGrid>
