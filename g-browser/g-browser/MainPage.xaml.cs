@@ -28,7 +28,7 @@ namespace g_browser
         {
             InitializeComponent();
             string path = @"C:/Users/daniwood/";
-            var files = scanner.selectfolders(path, "exe");
+            var files = scanner.SelectFiles(path, "exe");
             myDataGrid.ItemsSource = files;
             Style rowStyle = new Style(typeof(DataGridRow));
             rowStyle.Setters.Add(new EventSetter(DataGridRow.MouseDoubleClickEvent,

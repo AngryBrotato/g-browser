@@ -33,11 +33,12 @@ namespace Toolbox
             File.WriteAllText(fileName, json);
         }
     }
+
     public class FileScanner
     {
-        public List<FileData> selectfolders(string filename, string extension = "*")
+        public List<FileData> SelectFiles(string rootFolder, string extension = "*")
         {
-            DirectoryInfo dirInfo = new DirectoryInfo(filename);
+            DirectoryInfo dirInfo = new DirectoryInfo(rootFolder);
             var files = new List<FileData>();
 
             dirInfo.GetFiles("*." + extension)
@@ -46,35 +47,37 @@ namespace Toolbox
                 .ToList()
                 .ForEach(
                     f =>
-                     {
-                         FileData temp_file = new FileData();
-                         temp_file.CreationDate = f.CreationTime;
-                         temp_file.LastUsed = f.LastAccessTime;
-                         temp_file.FileName = f.Name;
-                         temp_file.Size = Convert.ToUInt32(f.Length);
-                         temp_file.ParentDir = f.DirectoryName;
-                         temp_file.FileNameFull = f.FullName;
-                         temp_file.Extension = f.Extension;
-                         files.Add(temp_file);
-                     });
+                    {
+                        FileData temp_file = new FileData();
+                        temp_file.CreationDate = f.CreationTime;
+                        temp_file.LastUsed = f.LastAccessTime;
+                        temp_file.FileName = f.Name;
+                        temp_file.Size = Convert.ToUInt32(f.Length);
+                        temp_file.ParentDir = f.DirectoryName;
+                        temp_file.FileNameFull = f.FullName;
+                        temp_file.Extension = f.Extension;
+                        files.Add(temp_file);
+                    });
 
             dirInfo.GetDirectories()
                 .Where(f => !f.Attributes.HasFlag(FileAttributes.Hidden))
+                // Ignore folder names:
                 .Where(f => !f.Name.StartsWith(".") && !f.Name.StartsWith("node_modules"))
                 .ToList()
                 .ForEach(
-                    d => selectfolders(d.FullName, extension).ForEach(files.Add)
+                    d => SelectFiles(d.FullName, extension).ForEach(files.Add)
                 );
             return files;
         }
-
     }
+
     public class FileData
     {
         public string FileName { get; set; }
         public string FileNameFull { get; set; }
         public string Extension { get; set; }
         public string ParentDir { get; set; }
+        public GameData GameInfo { get; set; }
         public long Size { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastUsed { get; set; }
@@ -84,5 +87,21 @@ namespace Toolbox
     public enum FileType
     {
         Launcher, Game, Installer, Resource, Unknown
+    }
+
+    public class GameData
+    {
+        public string Title;
+        public string Description;
+        public string Rating;
+        public string[] Tags;
+
+        public GameData(string title, string description, string rating = "na", string[] tags = null)
+        {
+            this.Title = title;
+            this.Description = description;
+            this.Rating = rating;
+            this.Tags = tags;
+        }
     }
 }
