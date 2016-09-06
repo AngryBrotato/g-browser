@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -49,10 +52,13 @@ namespace Toolbox
                 .ForEach(
                     f =>
                     {
+                        var details = FileVersionInfo.GetVersionInfo(f.FullName);
+                        if (details.FileDescription == "") return;
                         FileData temp_file = new FileData();
                         temp_file.CreationDate = f.CreationTime;
                         temp_file.LastUsed = f.LastAccessTime;
-                        temp_file.FileName = f.Name;
+                        temp_file.Details = details;
+                        temp_file.FileName = f.Name.Split('.')[0];
                         temp_file.Size = Convert.ToUInt32(f.Length);
                         temp_file.ParentDir = f.DirectoryName;
                         temp_file.FileNameFull = f.FullName;
@@ -64,12 +70,45 @@ namespace Toolbox
             dirInfo.GetDirectories()
                 .Where(f => !f.Attributes.HasFlag(FileAttributes.Hidden))
                 // Ignore folder names:
-                .Where(f => !f.Name.StartsWith(".") && !f.Name.StartsWith("node_modules"))
+                .Where(f => !f.Name.StartsWith(".") 
+                         && !f.Name.StartsWith("node_modules")
+                         && !f.Name.StartsWith("git"))
                 .ToList()
                 .ForEach(
                     d => SelectFiles(d.FullName, extension).ForEach(files.Add)
                 );
             return files;
+        }
+
+        public List<string> ReadInfo(FileData file)
+        {
+            List<string> suggestions = new List<string>();
+            List<string> directories = file.ParentDir.Split('\\').ToList();
+            string filename = file.FileName;
+
+            var numOfTimesToLoop = filename.Length/3;
+            // check for names with dots "." in them
+            //for (var i = 0; i < numOfTimesToLoop; i++)
+            //{
+            //    filename.Split('.').
+            //}
+            // suggestion based on filename
+            //suggestions.Add(file.FileName);
+            // suggestion based on current dir
+
+            //    .ToList().ForEach(g =>
+            //{
+            //    if (file.ParentDir.Contains(g))
+            //        suggestions.Add(" - " + directories[directories.Count - 1]);
+            //});
+
+            return suggestions;
+        }
+
+        private void checkDots(string name)
+        {
+            var nameArr = name.Split('.');
+
         }
     }
 
@@ -84,6 +123,7 @@ namespace Toolbox
         public DateTime CreationDate { get; set; }
         public DateTime LastUsed { get; set; }
         public FileType Type { get; set; }
+        public FileVersionInfo Details { get; set; }
     }
 
     public enum FileType

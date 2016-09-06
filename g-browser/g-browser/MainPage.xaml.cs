@@ -27,7 +27,7 @@ namespace g_browser
         public MainPage()
         {
             InitializeComponent();
-            string path = @"C:/Users/daniwood/";
+            string path = @"C:\Program Files (x86)\Steam";
             var files = scanner.SelectFiles(path, "exe");
             myDataGrid.ItemsSource = files;
             Style rowStyle = new Style(typeof(DataGridRow));
@@ -45,7 +45,9 @@ namespace g_browser
         public void Row_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             var file = ((DataGridRow) sender).Item as FileData;
-            MainWindow.OpenEditor(file);
+            label.Content = file.Details.ProductName + " - " + file.Details.FileDescription;
+            //scanner.ReadInfo(file).ForEach(s => label.Content += s);
+            //MainWindow.OpenEditor(file);
         }
     }
 }
