@@ -41,6 +41,7 @@ namespace Toolbox
             DirectoryInfo dirInfo = new DirectoryInfo(rootFolder);
             var files = new List<FileData>();
 
+            // Look at all of the files in the current folder
             dirInfo.GetFiles("*." + extension)
                 .Where(f => !f.Attributes.HasFlag(FileAttributes.Hidden))
                 .Where(f => !f.Name.StartsWith("."))
@@ -59,6 +60,7 @@ namespace Toolbox
                         files.Add(temp_file);
                     });
 
+            // Look into each sub-directory and call this function again on each of them.
             dirInfo.GetDirectories()
                 .Where(f => !f.Attributes.HasFlag(FileAttributes.Hidden))
                 // Ignore folder names:
@@ -96,7 +98,7 @@ namespace Toolbox
         public string Rating;
         public string[] Tags;
 
-        public GameData(string title, string description, string rating = "na", string[] tags = null)
+        public GameData(string title, string description, string rating = "n/a", string[] tags = null)
         {
             this.Title = title;
             this.Description = description;
