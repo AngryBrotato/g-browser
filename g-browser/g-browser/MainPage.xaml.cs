@@ -27,6 +27,7 @@ namespace g_browser
         public MainPage()
         {
             InitializeComponent();
+            SetupStyles();
             string path = @"C:\Program Files (x86)\Steam";
             var files = scanner.SelectFiles(path, "exe");
             myDataGrid.ItemsSource = files;
@@ -39,15 +40,28 @@ namespace g_browser
 
             edit_button.PreviewMouseLeftButtonUp += new MouseButtonEventHandler(
                 (object sender, MouseButtonEventArgs e) => { this.Content = new EditorPage((FileData)myDataGrid.SelectedItem); });
-
         }
 
         public void Row_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             var file = ((DataGridRow) sender).Item as FileData;
-            label.Content = file.Details.ProductName + " - " + file.Details.FileDescription;
+            PopulateFileData(file);
+            //label.Content = file.Details.ProductName + " - " + file.Details.FileDescription;
             //scanner.ReadInfo(file).ForEach(s => label.Content += s);
             //MainWindow.OpenEditor(file);
+        }
+
+        public void PopulateFileData(FileData file)
+        {
+            TitleLabel.Content = file.FileName;
+            PathLabel.Content = file.FileNameFull;
+            LastPlayedLabel.Content = file.LastUsed;
+            NameSuggestions.ItemsSource = file.SuggestedNames;
+        }
+
+        public void SetupStyles()
+        {
+            TitleLabel.FontSize = TitleLabel.Height/2;
         }
     }
 }

@@ -63,7 +63,10 @@ namespace Toolbox
                         temp_file.ParentDir = f.DirectoryName;
                         temp_file.FileNameFull = f.FullName;
                         temp_file.Extension = f.Extension;
-                        files.Add(temp_file);
+                        temp_file.SuggestedNames = ReadInfo(temp_file);
+
+                        if (temp_file.SuggestedNames.Count > 0)
+                            files.Add(temp_file);
                     });
 
             // Look into each sub-directory and call this function again on each of them.
@@ -80,35 +83,41 @@ namespace Toolbox
             return files;
         }
 
-        public List<string> ReadInfo(FileData file)
+        public List<NameSuggestion> ReadInfo(FileData file)
         {
-            List<string> suggestions = new List<string>();
+            List<NameSuggestion> suggestions = new List<NameSuggestion>();
             List<string> directories = file.ParentDir.Split('\\').ToList();
             string filename = file.FileName;
 
             var numOfTimesToLoop = filename.Length/3;
-            // check for names with dots "." in them
-            //for (var i = 0; i < numOfTimesToLoop; i++)
-            //{
-            //    filename.Split('.').
-            //}
-            // suggestion based on filename
-            //suggestions.Add(file.FileName);
-            // suggestion based on current dir
-
-            //    .ToList().ForEach(g =>
-            //{
-            //    if (file.ParentDir.Contains(g))
-            //        suggestions.Add(" - " + directories[directories.Count - 1]);
-            //});
-
+            for (int i = 0; i < numOfTimesToLoop; i++)
+            {
+                var mod = 0;
+                directories.ForEach(
+                    d =>
+                    {
+                        var substring = filename.Substring(i + mod, i + numOfTimesToLoop);
+                        if (d.Contains(substring))
+                            suggestions.Add(new NameSuggestion(d, substring));
+                    }
+                );
+                mod += 3;
+            }
             return suggestions;
         }
+    }
 
-        private void checkDots(string name)
+    public class NameSuggestion
+    {
+        public string Value { get; set; }
+        public int Length { get; }
+        public string MatchedBit { get; }
+
+        public NameSuggestion(string value, string matchedBit = "")
         {
-            var nameArr = name.Split('.');
-
+            this.Value = value;
+            this.Length = value.Length;
+            this.MatchedBit = matchedBit;
         }
     }
 
@@ -124,6 +133,7 @@ namespace Toolbox
         public DateTime LastUsed { get; set; }
         public FileType Type { get; set; }
         public FileVersionInfo Details { get; set; }
+        public List<NameSuggestion> SuggestedNames { get; set; }
     }
 
     public enum FileType
